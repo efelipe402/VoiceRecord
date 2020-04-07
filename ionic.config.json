@@ -1,5 +1,7 @@
 {
   "name": "devdacticMedia",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

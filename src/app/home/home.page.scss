@@ -26,6 +26,43 @@
   text-decoration: none;
 }
 
-ion-content ion-toolbar {
-  --background: translucent;
+ion-content {
+  --background: linear-gradient(45deg, rgb(0, 200, 171) 0%, rgb(106, 174, 242) 100%);
+}
+
+.padding-separator {
+  padding: 25px;
+  text-align: left;
+}
+
+.font-style {
+  color: rgb(255, 255, 255);
+  font-family: Helvetica;
+  font-size: 17px;
+}
+
+.record-container {
+  padding: 25px;
+  bottom: -8px;
+  position: relative;
+}
+
+.record-button {
+  --background: rgb(32, 204, 143);
+  --border-radius: 50%;
+  height: 60px;
+  width: 60px;
+}
+
+.recording-button {
+  --background: rgb(246, 95, 114);
+  --border-radius: 50%;
+  height: 60px;
+  width: 60px;
+}
+
+.talk-message {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
