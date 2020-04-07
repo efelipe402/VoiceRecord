@@ -7,8 +7,14 @@ import {Storage} from '@ionic/storage';
 import {VoiceService} from '../voice.service';
 import {Base64} from '@ionic-native/base64/ngx';
 import {error} from 'util';
+import {Isounds} from '../interfaces/Isounds';
+import {SOUNDS} from '../data/data';
 
 const MEDIA_FILES_KEY = 'MEDIA';
+const INIT_RECORD_MESSAGE = 'Habla ahora';
+const END_RECORD_MESSAGE = 'Intentar nuevamente?';
+const INIT_STATUS = 'init';
+const END_STATUS = 'end';
 
 @Component({
     selector: 'app-home',
@@ -16,13 +22,16 @@ const MEDIA_FILES_KEY = 'MEDIA';
     styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
+    recordSound: Isounds = SOUNDS as Isounds;
+    recordingMessage = INIT_RECORD_MESSAGE;
     statusRecording = false;
+    status;
     audioObject: MediaObject;
     records = [];
     private filePath: string;
     private fileName: string;
     mediaFiles = [];
-    recordingMessage = 'Habla ahora';
+
 
     constructor(private mediaCapture: MediaCapture, private storage: Storage, private platform: Platform,
                 private voiceService: VoiceService, private file: File, private media: Media, private base64: Base64) {
@@ -32,8 +41,22 @@ export class HomePage implements OnInit {
         this.fileName = new Date().getTime().toString();
     }
 
+    playRecordAudio() {
+        if (!this.recordSound.isPlaying) {
+            const audio = new Audio(this.recordSound.audio);
+            audio.load();
+            this.recordSound.isPlaying = true;
+            audio.play().then(() => {
+                this.record();
+            });
+        }
+
+    }
+
     async record() {
         try {
+            await this.playRecordAudio();
+            this.status = INIT_STATUS;
             this.statusRecording = true;
             this.getFileName();
             await this.verifyPlatform();
@@ -79,7 +102,9 @@ export class HomePage implements OnInit {
 
     async stopRecording() {
         try {
-            this.recordingMessage = '/ntentar nuevamente?';
+            this.status = END_STATUS;
+            this.recordSound.isPlaying = false;
+            this.recordingMessage = END_RECORD_MESSAGE;
             this.statusRecording = false;
             this.audioObject.stopRecord();
             this.audioObject.release();
@@ -111,7 +136,7 @@ export class HomePage implements OnInit {
 
     onPress($event) {
         if ($event.type === 'press') {
-            this.record();
+            this.playRecordAudio();
         } else if ($event.type === 'pressup') {
             this.stopRecording();
         }

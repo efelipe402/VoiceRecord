@@ -14,13 +14,13 @@
             <div class="record-container">
                 <ion-button id="record-button"
                             [ngClass]="{'record-button':!statusRecording, 'recording-button':statusRecording}"
-                            (press)="onPress($event)" (pressUp)="onPress($event)" (longPress)="onLongPress($event)"
-                            (doubleTap)="doubleTap($event)">
+                            (press)="onPress($event)" (pressUp)="onPress($event)">
                     <ion-img src="../../assets/images/mic/mic.svg"></ion-img>
                 </ion-button>
             </div>
-            <div class="talk-message" *ngIf="statusRecording">
-                <ion-label class="font-style">{{recordingMessage}}</ion-label>
+            <div class="talk-message">
+                <ion-label class="font-style"
+                           *ngIf="status === 'init' || status === 'end' ">{{recordingMessage}}</ion-label>
             </div>
 
 
